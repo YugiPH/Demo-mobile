@@ -1,28 +1,44 @@
-const randomNumber = new Promise((resolve, reject) => {
-  const url = 'https://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
-  let request = new XMLHttpRequest();
+import React, { useState } from "react";
+import { Button, View, Text, TextInput } from "react-native";
 
-  request.open('GET', url);
-  request.onload = function() {
-     if (request.status == '200') {
-        resolve(request.response);
-     } else {
-        reject(Error(request.statusText)); 
-     }
-  };
+const Header = (props) => {
+   const [text, onChangeText] = useState('Useless text');
+   
+   const [color, setColor] = useState('blue');
+   // const onPressSentData = () => {
+   //    console.log('send data');
+   //    props.getName('Cee')
+   // }
 
-  request.onerror = function() {
-     reject(Error('Error fetching data.'));
-  };
+   const onPressSentColor = () => {
+      console.log('send color');
+      props.getColor(color)
+   }
 
-  request.send();
-});
+   return (
+      <View style={{ borderWidth: 5 }}>
+         <Text style={{ fontSize: 30 }}>Header</Text>
+         <TextInput style={{ color: 'black', fontSize: 30, textAlign: 'center' }}
+            onChangeText={onChangeText}
+            value={text}
+         />
+         <Button title="Click me" onPress={onPressSentColor} />
+      </View>
+   )
+}
 
-randomNumber
-.then((res) => {
-  console.log("Success");
-  console.log("Random number: ", res);
-})
-.catch((err) => {
-  console.log("Error: ", err.message);
-})
+export default function demo() {
+   const [color, setColor] = useState()
+
+   const getColorFn = (value) => {
+      console.log(value);
+      setColor(value)
+   }
+
+   return (
+      <View>
+         <Header getColor={getColorFn} />
+         <Text style={{ color: color, fontSize: 50 }}> {color}</Text>
+      </View>
+   )
+};
